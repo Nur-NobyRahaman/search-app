@@ -1,23 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { useMemo, useState } from "react";
 
 function App() {
+  const [items, setItems] = useState([]);
+  const [query, setQuery] = useState("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newItems = e.target.add.value;
+    setItems((currentItems) => [...currentItems, newItems]);
+    e.target.reset();
+  };
+
+  const filteredItems = useMemo(() => {
+    return items.filter((item) =>
+      item.toLowerCase().includes(query.toLowerCase())
+    );
+  }, [query, items]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h3>Search app</h3>
+      <input
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="search"
+        type="text"
+        name=""
+        id=""
+      />
+      <p>Add items</p>
+      <form action="" onSubmit={handleSubmit}>
+        <input placeholder="Add items" type="text" name="add" id="" />
+        <button type="submit">Add</button>
+      </form>
+      <h4>Items</h4>
+      {filteredItems?.map((item, index) => (
+        <p key={index}>{item} </p>
+      ))}
     </div>
   );
 }
